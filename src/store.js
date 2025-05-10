@@ -1,38 +1,19 @@
-export const initialStore=()=>{
-  return{
+export const initialStore = () => {
+  return {
     message: null,
     contacts: [],
     users: [],
     error: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
   }
 }
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
+  switch (action.type) {
     case 'load_data':
-      fetch('https://playground.4geeks.com/contact/agendas', {
-        method: 'POST',
-        'Content-Type': 'application/json',
-        body: JSON.stringify(action.payload)
-      })
-      .then(resp=>resp.json())
-      .then(data=> {
-        return {...store, agendas: data}
-      })
-      .catch(err=> {
-        return {...store, error: err}})  
+      return {
+        ...store,
+        contacts: action.payload
+      }
     case 'add_contact':
       return {
         ...store,
@@ -41,18 +22,16 @@ export default function storeReducer(store, action = {}) {
     case 'delete_contact':
       return {
         ...store,
-        contacts: store.contacts.filter(el=> el.phone !== action.payload.phone)
+        contacts: store.contacts.filter(el => el.id !== action.payload.id)
       }
-
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+    case 'update_contact':
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
-      };
+        contacts: store.contacts.map(contact =>
+          contact.id === action.payload.id ? action.payload : contact
+        )
+      }
     default:
       throw Error('Unknown action.');
-  }    
+  }
 }

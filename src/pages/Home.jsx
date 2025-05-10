@@ -1,17 +1,14 @@
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
 
-  const {store, dispatch} =useGlobalReducer()
-
 	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			
+		<div className="container mt-5">
+			<div className="d-flex justify-content-center gap-3 mb-4">
+				<Link to="/contacts" className="btn btn-primary">Contacts</Link>
+				<Link to="/addcontact" className="btn btn-secondary">Add Contact</Link>
+			</div>
+
 		</div>
 	);
 }; 
