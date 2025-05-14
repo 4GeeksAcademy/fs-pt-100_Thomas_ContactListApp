@@ -3,21 +3,25 @@ const contactServices = {}
 contactServices.loadContacts = async () => {
     try {
         const resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts')
+        if (resp.status === 404 || resp.status === 502) {
+          console.warn("Agenda not found. ${resp.status} Creating it.");
+          await contactServices.createAgenda();
+          resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts');
+        }
+        if (!resp.ok) {
+            const errorData = await resp.json();
+            console.error("Failed to load contacts:", errorData);
+            return [];
+        }
         const data = await resp.json()
         return data.contacts
     } catch (error) {
         console.error("Error loading contacts:", error);
         return error
     }
-
 }
 
-let agendaCreated = false;
-
 contactServices.createAgenda = async () => {
-    if (agendaCreated) return;
-    agendaCreated = true;
-
     try {
         const resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley', {
             method: 'POST',
@@ -28,11 +32,7 @@ contactServices.createAgenda = async () => {
 
         const data = await resp.json();
 
-        if (!resp.ok) {
-            if (data.detail?.includes("already exists")) {
-                console.warn("Agenda already exists. Skipping creation.");
-                return null;
-            }
+        if (!resp.ok && !data.detail?.includes("already exists")) {
             throw new Error(data.detail || 'Failed to create agenda');
         }
 
@@ -45,7 +45,6 @@ contactServices.createAgenda = async () => {
 
 contactServices.createContact = async (formData) => {
   try {
-    await contactServices.createAgenda();
     const response = await fetch("https://playground.4geeks.com/contact/agendas/tmosley/contacts", {
       method: "POST",
       headers: {

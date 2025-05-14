@@ -58,10 +58,10 @@ export const ContactCard = (props) => {
 
     return (
         <div className="container card my-3 p-0">
-            <div class="card-header bg-secondary">
+            <div className="card-header bg-secondary">
                 <h3 className="text-center text-white m-0">{props.name}</h3>
             </div>
-            <div class="card-body">
+            <div className="card-body">
                 <h5><span className="small-caps">tel.: </span>{props.phone}</h5>
                 <h5><span className="small-caps">email: </span>{props.email}</h5>
                 <h5><span className="small-caps">address: </span>{props.address}</h5>
@@ -88,6 +88,7 @@ export const ContactCard = (props) => {
                                         <label htmlFor="name" className="form-label small-caps">name:</label>
                                         <input
                                             name="name"
+                                            id="name"
                                             className="form-control mb-2"
                                             value={formData.name}
                                             onChange={handleChange}
@@ -95,6 +96,7 @@ export const ContactCard = (props) => {
                                         <label htmlFor="phone" className="form-label small-caps">tel.:</label>
                                         <input
                                             name="phone"
+                                            id="phone"
                                             className="form-control mb-2"
                                             placeholder={formData.phone}
                                             value={formData.phone}
@@ -103,6 +105,7 @@ export const ContactCard = (props) => {
                                         <label htmlFor="email" className="form-label small-caps">email:</label>
                                         <input
                                             name="email"
+                                            id="email"
                                             className="form-control mb-2"
                                             placeholder={formData.email}
                                             value={formData.email}
@@ -111,6 +114,7 @@ export const ContactCard = (props) => {
                                         <label htmlFor="address" className="form-label small-caps">address:</label>
                                         <input
                                             name="address"
+                                            id="address"
                                             className="form-control"
                                             placeholder={formData.address}
                                             value={formData.address}
