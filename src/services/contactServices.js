@@ -2,24 +2,29 @@ const contactServices = {}
 
 contactServices.loadContacts = async () => {
     try {
-        const resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts')
+        let resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts');
         if (resp.status === 404 || resp.status === 502) {
-          console.warn("Agenda not found. ${resp.status} Creating it.");
-          await contactServices.createAgenda();
-          resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts');
+            console.warn(`Agenda not found. ${resp.status} Creating it.`);
+            const agendaCreated = await contactServices.createAgenda();
+            if (!agendaCreated) {
+                throw new Error("Agenda creation failed");
+            }
+            resp = await fetch('https://playground.4geeks.com/contact/agendas/tmosley/contacts');
         }
+
         if (!resp.ok) {
             const errorData = await resp.json();
             console.error("Failed to load contacts:", errorData);
             return [];
         }
-        const data = await resp.json()
-        return data.contacts
+
+        const data = await resp.json();
+        return data.contacts;
     } catch (error) {
         console.error("Error loading contacts:", error);
-        return error
+        return error;
     }
-}
+};
 
 contactServices.createAgenda = async () => {
     try {
